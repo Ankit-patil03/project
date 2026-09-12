@@ -1,180 +1,576 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy 7 Months, Baby ♡</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You — A Little Letter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #211018;
+    --bg-mid: #3a1a28;
+    --paper: #f7ecdc;
+    --envelope: #e6bda6;
+    --envelope-dark: #c98d7c;
+    --envelope-flap: #dba48d;
+    --wax: #7c2333;
+    --wax-dark: #591722;
+    --gold: #cda05e;
+    --ink: #3c2b1f;
+    --ink-soft: #7a6858;
+  }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+  *{ box-sizing: border-box; }
+  html, body{ height: 100%; }
 
-    body {
-      height: 100vh;
-      background: linear-gradient(135deg, #fff5f9 0%, #ffb6d9 50%, #ff8fab 100%);
-      font-family: 'Playfair Display', serif;
-      color: #333;
-      overflow: hidden;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+  body{
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at 50% 15%, var(--bg-mid), var(--bg-deep) 72%);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    overflow: hidden;
+    position: relative;
+  }
 
-    .container {
-      text-align: center;
-      width: 90%;
-      max-width: 720px;
-      padding: 20px;
-    }
+  /* ---------- page-load entrance: one orchestrated moment ---------- */
+  @keyframes rise-in{
+    from{ opacity: 0; transform: translateY(18px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
 
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 7rem;
-      color: #d63076;
-      margin-bottom: 8px;
-      text-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
+  .scene{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: rise-in .8s ease both;
+    transition: filter .5s ease;
+  }
 
-    h2 {
-      font-size: 2.8rem;
-      color: #c2185b;
-      margin-bottom: 50px;
-      font-weight: 500;
-    }
+  .scene.opened{ filter: brightness(0.9); }
 
-    .card {
-      background: rgba(255, 255, 255, 0.92);
-      padding: 60px 50px;
-      border-radius: 30px;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.15);
-      backdrop-filter: blur(12px);
-    }
+  .hint{
+    font-family: 'Dancing Script', cursive;
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin-top: 1.1rem;
+    animation: pulse-soft 2.6s ease-in-out infinite;
+  }
 
-    .letter {
-      font-size: 1.58rem;
-      line-height: 2.4rem;
-      color: #444;
-      margin: 30px 0;
-    }
+  .scene.opened .hint{ animation: none; opacity: .85; }
 
-    .heart {
-      font-size: 5rem;
-      color: #e91e63;
-      margin: 45px 0;
-      animation: softbeat 2.2s infinite ease-in-out;
-    }
+  @keyframes pulse-soft{
+    0%, 100%{ opacity: .55; }
+    50%{ opacity: 1; }
+  }
 
-    @keyframes softbeat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.15); }
-    }
+  /* ---------- envelope + the two letters tucked inside it ---------- */
 
-    .sign {
-      font-family: 'Great Vibes', cursive;
-      font-size: 4.2rem;
-      color: #d63076;
-      margin: 60px 0 40px;
-    }
+  .envelope-wrap{
+    position: relative;
+    width: min(300px, 78vw);
+    perspective: 1200px;
+  }
 
-    button {
-      padding: 18px 70px;
-      font-size: 1.7rem;
-      background: #e91e63;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 12px 35px rgba(233,30,99,0.4);
-      transition: all 0.4s ease;
-    }
+  .letter-peek{
+    position: absolute;
+    top: 30%;
+    height: 56%;
+    z-index: 1;
+    appearance: none;
+    border: none;
+    background: var(--paper);
+    border-radius: 6px 6px 2px 2px;
+    box-shadow: 0 8px 18px rgba(0,0,0,.32);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 14%;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3rem;
+    color: var(--wax-dark);
+    opacity: 0;
+    transform: translateY(0) scale(.45);
+    transition: transform .7s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+  }
 
-    button:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(233,30,99,0.5);
-    }
+  .letter-peek:focus-visible{
+    outline: 3px solid var(--gold);
+    outline-offset: 3px;
+  }
 
-    /* Real rose petals - no text */
-    .petal {
-      position: fixed;
-      font-size: 2.4rem;
-      pointer-events: none;
-      opacity: 0.8;
-      animation: fall linear infinite;
-      z-index: -1;
-    }
+  .letter-peek.left{ left: 9%; width: 44%; }
+  .letter-peek.right{ left: 47%; width: 44%; }
 
-    @keyframes fall {
-      0% {
-        transform: translateY(-10vh) translateX(-50px) rotate(0deg);
-        opacity: 0;
-      }
-      10% { opacity: 0.8; }
-      90% { opacity: 0.8; }
-      100% {
-        transform: translateY(110vh) translateX(80px) rotate(720deg);
-        opacity: 0;
-      }
-    }
-  </style>
+  .scene.opened .letter-peek.left{
+    transform: translateY(-86%) scale(1) rotate(-9deg);
+    opacity: 1;
+    transition-delay: .35s;
+  }
+  .scene.opened .letter-peek.right{
+    transform: translateY(-90%) scale(1) rotate(8deg);
+    opacity: 1;
+    transition-delay: .55s;
+  }
+
+  .scene.opened .letter-peek.left:hover,
+  .scene.opened .letter-peek.left:focus-visible{
+    transform: translateY(-93%) scale(1.06) rotate(-9deg);
+    z-index: 5;
+  }
+  .scene.opened .letter-peek.right:hover,
+  .scene.opened .letter-peek.right:focus-visible{
+    transform: translateY(-97%) scale(1.06) rotate(8deg);
+    z-index: 5;
+  }
+
+  .envelope{
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .envelope:focus-visible{
+    outline: 3px solid var(--gold);
+    outline-offset: 8px;
+    border-radius: 14px;
+  }
+
+  /* Once opened, the envelope has done its job — let clicks pass through
+     it (and its children, since pointer-events is inherited) so the two
+     letters, which sit underneath it in the DOM, can actually be clicked. */
+  .scene.opened .envelope{ pointer-events: none; }
+
+  .env-body{
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, var(--envelope), var(--envelope-dark));
+    border-radius: 10px;
+    box-shadow: 0 20px 40px -14px rgba(0,0,0,.6);
+    z-index: 1;
+  }
+
+  .flap{
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 55%;
+    background: linear-gradient(160deg, var(--envelope-flap), var(--envelope-dark));
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    z-index: 2;
+    transition: transform .6s ease, opacity .45s ease .15s;
+  }
+
+  .scene.opened .flap{
+    transform: rotateX(150deg);
+    opacity: 0;
+  }
+
+  .seal{
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, -50%);
+    width: clamp(32px, 11vw, 46px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--wax) 55%, var(--wax-dark) 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,.4), inset 0 1px 2px rgba(255,255,255,.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+  }
+
+  .seal svg{ width: 55%; height: 55%; }
+
+  .envelope-label{
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    top: 66%;
+    z-index: 2;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1rem, 4.2vw, 1.3rem);
+    color: var(--wax-dark);
+    pointer-events: none;
+    transition: opacity .35s ease;
+  }
+
+  .scene.opened .envelope-label{ opacity: 0; }
+
+  /* ---------- floating hearts ---------- */
+
+  .heart-layer{
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 3;
+  }
+
+  .floating-heart{
+    position: absolute;
+    bottom: 42%;
+    color: var(--wax);
+    animation: float-up var(--duration, 2.4s) ease-out forwards;
+  }
+
+  @keyframes float-up{
+    0%{ transform: translate(0, 0) scale(.6); opacity: 0; }
+    15%{ opacity: 1; }
+    100%{ transform: translate(var(--drift, 0px), -170px) scale(1); opacity: 0; }
+  }
+
+  /* ---------- the letter-reading modal ---------- */
+
+  .overlay{
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(20, 8, 14, 0);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .4s ease, background .4s ease;
+    z-index: 10;
+  }
+
+  .overlay.show{
+    opacity: 1;
+    pointer-events: auto;
+    background: rgba(20, 8, 14, .58);
+  }
+
+  .letter-card{
+    position: relative;
+    width: min(440px, 100%);
+    max-height: 82vh;
+    overflow-y: auto;
+    background: var(--paper);
+    border-radius: 4px;
+    padding: 2.4rem 2.1rem 1.6rem;
+    box-shadow: 0 30px 60px rgba(0,0,0,.5);
+    transform: translateY(24px) scale(.92);
+    opacity: 0;
+    transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s ease;
+  }
+
+  .overlay.show .letter-card{
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    transition-delay: .1s;
+  }
+
+  .close-btn{
+    position: absolute;
+    top: .5rem;
+    right: .7rem;
+    background: none;
+    border: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: .4rem .6rem;
+  }
+
+  .close-btn:hover, .close-btn:focus-visible{ color: var(--wax); }
+
+  .letter-text{
+    font-size: clamp(1.05rem, 2.2vw, 1.22rem);
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre-line;
+    min-height: 4em;
+    margin: .5rem 0 0;
+    transition: opacity .2s ease;
+  }
+
+  .letter-text.fading{ opacity: 0; }
+
+  .signature{
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.7rem;
+    text-align: right;
+    color: var(--wax);
+    margin-top: 1.2rem;
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+
+  .signature.visible{ opacity: 1; }
+
+  .letter-nav{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .9rem;
+    margin-top: 1.4rem;
+  }
+
+  .nav-btn{
+    background: none;
+    border: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--wax);
+    cursor: pointer;
+    padding: .2rem .5rem;
+  }
+
+  .nav-btn:hover, .nav-btn:focus-visible{ color: var(--wax-dark); }
+
+  .dots{ display: flex; gap: .5rem; }
+
+  .dot{
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    background: var(--ink-soft);
+    opacity: .4;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+
+  .dot.active{ opacity: 1; background: var(--wax); transform: scale(1.25); }
+  .dot:focus-visible{ outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .scene{ animation: none; }
+    .hint{ animation: none; }
+    .floating-heart{ display: none; }
+    *{ transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Happy 7 Months</h1>
-    <h2>My Love ♡</h2>
+  <div class="scene">
+    <div class="envelope-wrap">
+      <div class="heart-layer"></div>
 
-    <div class="card">
-      <div class="letter">
-        <p>My beautiful Kitty,</p>
-        <p>Seven months of waking up happy because of you.<br>
-        Seven months of your voice being my favorite sound.<br>
-        Seven months of falling deeper every single day.</p>
-        <p>You make every moment better just by being you.</p>
-        <p>I’m so grateful you chose me — and I’ll keep choosing you forever.</p>
-        <div class="heart">Heart</div>
-        <p>I love you more my Baby<br></p>
+      <!-- the two letters, tucked behind the envelope until it's opened -->
+      <button class="letter-peek left" type="button" tabindex="-1" aria-hidden="true" aria-label="Open the first letter">1</button>
+      <button class="letter-peek right" type="button" tabindex="-1" aria-hidden="true" aria-label="Open the second letter">2</button>
+
+      <button class="envelope" type="button" aria-label="Open the envelope" aria-expanded="false">
+        <span class="env-body"></span>
+        <span class="envelope-label"></span>
+        <span class="flap">
+          <span class="seal">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M12 21s-6.7-4.35-9.3-8.1C1 10.2 1.6 6.7 4.6 5.1 7 3.8 9.7 4.6 12 7.3 14.3 4.6 17 3.8 19.4 5.1c3 1.6 3.6 5.1 1.9 7.8C18.7 16.65 12 21 12 21z"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+    </div>
+    <p class="hint">tap the envelope</p>
+  </div>
+
+  <div class="overlay">
+    <div class="letter-card">
+      <button class="close-btn" type="button" aria-label="Close the letter">×</button>
+      <p class="letter-text"></p>
+      <p class="signature"></p>
+      <div class="letter-nav">
+        <button class="nav-btn prev" type="button" aria-label="Previous letter">‹</button>
+        <div class="dots"></div>
+        <button class="nav-btn next" type="button" aria-label="Next letter">›</button>
       </div>
-
-      <div class="sign">
-        Forever yours,<br>Kit
-      </div>
-
-      <button onclick="showLove()">Click if you love me too ♡</button>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <script>
-    // Beautiful falling rose petals (real petals, no text)
-    function createPetal() {
-      const p = document.createElement("div");
-      p.classList.add("petal");
-      p.innerHTML = "Rose";  // Rose petal symbol
-      p.style.left = Math.random() * 100 + "vw";
-      p.style.animationDuration = (Math.random() * 10 + 12) + "s";
-      p.style.animationDelay = Math.random() * 5 + "s";
-      document.body.appendChild(p);
-      setTimeout(() => p.remove(), 25000);
+<script>
+  // ---------- 1. Grab the elements we'll be working with ----------
+  const sceneEl     = document.querySelector('.scene');
+  const hint        = document.querySelector('.hint');
+  const envelopeBtn = document.querySelector('.envelope');
+  const peekEls     = document.querySelectorAll('.letter-peek');
+  const heartLayer  = document.querySelector('.heart-layer');
+
+  const overlay     = document.querySelector('.overlay');
+  const letterText  = document.querySelector('.letter-text');
+  const signature   = document.querySelector('.signature');
+  const closeBtn    = document.querySelector('.close-btn');
+  const prevBtn     = document.querySelector('.nav-btn.prev');
+  const nextBtn     = document.querySelector('.nav-btn.next');
+  const dotsWrap    = document.querySelector('.dots');
+
+  // ---------- 2. The content. Add as many letters as you like! ----------
+  const RECIPIENT = 'To someone I love,';
+  document.querySelector('.envelope-label').textContent = RECIPIENT;
+
+  const LETTERS = [
+    {
+      message: `My dearest Monu,
+
+If you're reading this, it means you finally opened it — I've been waiting.
+
+     I don’t know if words will ever be enough to explain how much I love you.
+     You’ve become such a beautiful part of my life, and somehow, even the simplest moments feel better because they have you in them.
+     If I had to choose again,
+     I’d still choose you.`,
+      signature: '— Always yours Ant'
+    },
+    {
+      message: `Hello again,
+
+Since you came back for a second envelope, I'll let you in on something: I didn't write this because I ran out of things to say in the first one. I wrote it because one letter was never going to be enough.
+
+I love you in the little moments, the quiet moments, the difficult ones, and all the moments in between.
+You’re someone my heart feels at home with.`,
+      signature: '— Still, and always Your Ant'
+    }
+  ];
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let isOpen = false;       // has the envelope been opened this session
+  let currentIndex = 0;     // which letter is showing in the reader
+  let typeTimer = null;     // holds the setInterval id so we can cancel it
+
+  // ---------- 3. Build the nav dots once, from the LETTERS array ----------
+  const dotEls = LETTERS.map((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'dot';
+    dot.setAttribute('aria-label', `Show letter ${i + 1}`);
+    dot.addEventListener('click', () => { if (i !== currentIndex) switchLetter(i); });
+    dotsWrap.appendChild(dot);
+    return dot;
+  });
+
+  function updateDots(){
+    dotEls.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+  }
+
+  // ---------- 4. Opening the envelope: two letters pop out ----------
+  function openEnvelope(){
+    if (isOpen) return;                       // guard clause: only runs once
+    isOpen = true;
+
+    sceneEl.classList.add('opened');          // this class drives every CSS transition below
+    envelopeBtn.setAttribute('aria-expanded', 'true');
+    hint.textContent = 'pick a letter to read';
+
+    // Letters were hidden from tab order and screen readers while tucked away —
+    // now that they're visible, make them reachable again.
+    peekEls.forEach(btn => {
+      btn.tabIndex = 0;
+      btn.setAttribute('aria-hidden', 'false');
+    });
+
+    if (!reduceMotion) spawnHearts(9);
+  }
+
+  // ---------- 5. Reading a letter (the modal) ----------
+  function openReader(index){
+    currentIndex = index;
+    updateDots();
+    overlay.classList.add('show');
+    playMessage();
+  }
+
+  function switchLetter(newIndex){
+    // the "+ LETTERS.length" keeps this positive even if newIndex is -1 (wraps around)
+    currentIndex = (newIndex + LETTERS.length) % LETTERS.length;
+    updateDots();
+    signature.classList.remove('visible');
+    letterText.classList.add('fading');
+    window.setTimeout(() => {
+      letterText.classList.remove('fading');
+      playMessage();
+    }, reduceMotion ? 0 : 220);
+  }
+
+  function closeReader(){
+    overlay.classList.remove('show');
+    clearInterval(typeTimer);
+    typeTimer = null;
+  }
+
+  // Typewriter effect: reveals the current letter one character at a time
+  function playMessage(){
+    clearInterval(typeTimer);
+    const msg = LETTERS[currentIndex].message;
+    signature.textContent = LETTERS[currentIndex].signature;
+    signature.classList.remove('visible');
+
+    if (reduceMotion){
+      letterText.textContent = msg;
+      signature.classList.add('visible');
+      return;
     }
 
-    // Start with a few petals, then keep them coming gently
-    for (let i = 0; i < 15; i++) createPetal();
-    setInterval(createPetal, 2000);
+    letterText.textContent = '';
+    let i = 0;
+    typeTimer = setInterval(() => {
+      i++;
+      letterText.textContent = msg.slice(0, i);
+      if (i >= msg.length){
+        clearInterval(typeTimer);
+        typeTimer = null;
+        signature.classList.add('visible');
+      }
+    }, 18);
+  }
 
-    // Sweet confetti + message
-    function showLove() {
-      confetti({
-        particleCount: 250,
-        spread: 90,
-        origin: { y: 0.6 },
-        colors: ['#e91e63', '#ff69b4', '#ffc0cb', '#ff8fab', '#fadadd']
-      });
-
-      setTimeout(() => {
-        alert("I love you endlessly, baby. Happy 7 months — you're my whole world ♡");
-      }, 900);
+  // ---------- 6. Floating hearts ----------
+  function spawnHearts(count){
+    for (let i = 0; i < count; i++){
+      const heart = document.createElement('span');
+      heart.className = 'floating-heart';
+      heart.textContent = '❤';
+      heart.style.left = `${38 + Math.random() * 24}%`;
+      heart.style.fontSize = `${14 + Math.random() * 14}px`;
+      heart.style.setProperty('--drift', `${Math.random() * 70 - 35}px`);
+      heart.style.setProperty('--duration', `${2.1 + Math.random() * 1.4}s`);
+      heart.style.animationDelay = `${Math.random() * 0.3}s`;
+      heartLayer.appendChild(heart);
+      heart.addEventListener('animationend', () => heart.remove());
     }
-  </script>
+  }
+
+  // ---------- 7. Wiring up events ----------
+  envelopeBtn.addEventListener('click', openEnvelope);
+
+  peekEls.forEach((btn, i) => btn.addEventListener('click', () => openReader(i)));
+
+  closeBtn.addEventListener('click', closeReader);
+  prevBtn.addEventListener('click', () => switchLetter(currentIndex - 1));
+  nextBtn.addEventListener('click', () => switchLetter(currentIndex + 1));
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeReader();   // only the dark backdrop, not the card
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!overlay.classList.contains('show')) return;
+    if (e.key === 'Escape') closeReader();
+    if (e.key === 'ArrowRight') switchLetter(currentIndex + 1);
+    if (e.key === 'ArrowLeft') switchLetter(currentIndex - 1);
+  });
+</script>
 </body>
 </html>
